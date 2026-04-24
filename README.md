@@ -1,31 +1,36 @@
-# Neural Network from Scratch 
+# Student Performance Segmenting: An Unsupervised Learning Study
 
-A lightweight, 2-layer Multilayer Perceptron (MLP) built entirely from scratch using only Python and NumPy. This project was developed as a hands-on exploration of deep learning fundamentals for the CAP 4105 (Machine Learning) course at Florida International University.
+## Project Overview
+This project explores the application of unsupervised learning algorithms to identify behavioral patterns within a university student dataset. By analyzing features such as study habits, sleep patterns, and attendance rates, the project aims to discover hidden structures in student performance data without the use of pre-defined labels.
 
-By avoiding high-level frameworks like PyTorch or TensorFlow, this project explicitly demonstrates the underlying mathematics of neural networks, including manual backpropagation, chain-rule calculus, and gradient descent optimization.
+The analysis includes a from-scratch implementation of K-Means clustering, followed by a comparative study of Agglomerative Hierarchical Clustering and DBSCAN (Density-Based Spatial Clustering of Applications with Noise).
 
-## Features
+## Goals
+* **Data Synthesis & Cleaning:** Preprocess raw student data by handling missing values, duplicates, and impossible outliers to ensure a high-quality dataset.
+* **Algorithm Implementation:** Build a functional K-Means clustering algorithm using only NumPy and compare its efficiency against the industry-standard `scikit-learn` library.
+* **Comparative Analysis:** Evaluate the strengths and weaknesses of different clustering paradigms (Centroid-based, Hierarchical, and Density-based).
+* **Ground Truth Validation:** Quantify the effectiveness of unsupervised methods by measuring how well the discovered clusters align with actual student pass/fail outcomes.
 
-* **Zero-Dependency Architecture**: Built solely with standard Python and `numpy` for matrix/array operations.
-* **Custom Forward Pass**: Implements a 2-input, 2-hidden, 1-output network architecture.
-* **Manual Backpropagation**: Explicit mathematical implementation of the chain rule to compute gradients for all 9 network parameters.
-* **Binary Cross-Entropy Loss**: Custom loss function with built-in protections against log(0) domain errors.
-* **Gradient Descent Optimization**: Full training loop with iterative weight updates.
+## Tools & Technologies
+| Category | Tools |
+| :--- | :--- |
+| **Language** | Python |
+| **Data Manipulation** | Pandas, NumPy |
+| **Machine Learning** | Scikit-learn (KMeans, DBSCAN, AgglomerativeClustering, StandardScaler) |
+| **Statistical Analysis** | SciPy (Hierarchy Linkage & Dendrograms) |
+| **Visualization** | Matplotlib, Seaborn |
 
-## Dataset
+## Methodology
 
-The network is trained on a synthetic dataset representing 10 students. 
-* **Features (X)**: Two continuous features (e.g., hours studied, previous grades).
-* **Target (y)**: Binary classification predicting whether the student passes (1) or fails (0).
+### 1. Data Preprocessing
+Raw data was cleaned using median imputation for missing values and Z-score normalization (StandardScaler). This step was critical to ensure that features with larger scales (like attendance rate) did not disproportionately influence distance-based calculations.
 
-## Network Architecture
+### 2. Implementation of Clustering Models
+* **K-Means (Scratch + Sklearn):** Implemented the full iteration loop (Assignment and Update steps) to identify two distinct student profiles. The **Elbow Method** was utilized to determine that $K=2$ was the optimal cluster count.
+* **Hierarchical Clustering:** Utilized **Ward’s Linkage** and visualized relationship structures through a **Dendrogram**. Compared Single, Complete, and Average linkages to observe the "chaining effect" versus cohesive grouping.
+* **DBSCAN:** Investigated the dataset's density to isolate noise points (outliers). This was used to identify "contextual anomalies"—students whose behavior significantly diverged from the majority.
 
-The Multilayer Perceptron is structured as a **2-2-1** network:
-1.  **Input Layer**: 2 features
-2.  **Hidden Layer**: 2 neurons with **Sigmoid** activation
-3.  **Output Layer**: 1 neuron with **Sigmoid** activation
-
-### The Mathematics (Backpropagation)
-The backward pass manually computes the error gradients with respect to each weight and bias:
-* **Output Error**: `dL/dzo = y_hat - y`
-* **Chain Rule through Sigmoid**: `sigma'(z) = sigma(z) * (1 - sigma(z))`
+## Key Outcomes & Insights
+* **Latent Structure Discovery:** Without any prior knowledge of pass/fail status, the K-Means model achieved an **85% alignment** with actual student outcomes. This proves that study habits and sleep are objective predictors of success.
+* **The At-Risk Profile:** The model successfully isolated a cluster representing "At-Risk" students characterized by lower attendance and reduced sleep, providing a roadmap for early academic intervention.
+* **Algorithm Efficiency:** Ward’s Hierarchical Clustering and K-Means provided the most balanced and actionable results, whereas DBSCAN’s density-based approach was highly sensitive to noise in this specific continuum of student data.
